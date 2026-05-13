@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guida di Studio — Sicurezza Legale, Forense e Protezione dei Dati</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blue-50: #E6F1FB; --blue-100: #B5D4F4; --blue-400: #378ADD; --blue-600: #185FA5; --blue-800: #0C447C; --blue-900: #042C53;
+    --teal-50: #E1F5EE; --teal-100: #9FE1CB; --teal-600: #0F6E56; --teal-800: #085041;
+    --coral-50: #FAECE7; --coral-600: #993C1D; --coral-800: #712B13;
+    --amber-50: #FAEEDA; --amber-600: #854F0B; --amber-800: #633806;
+    --green-50: #EAF3DE; --green-600: #3B6D11; --green-800: #27500A;
+    --purple-50: #EEEDFE; --purple-600: #534AB7; --purple-800: #3C3489;
+    --red-50: #FCEBEB; --red-600: #A32D2D; --red-800: #791F1F;
+    --gray-50: #F1EFE8; --gray-200: #B4B2A9; --gray-600: #5F5E5A; --gray-800: #444441;
+    --bg: #f8f7f4;
+    --surface: #ffffff;
+    --border: #e2e0da;
+    --text: #1a1a18;
+    --text-muted: #5a5954;
+    --text-hint: #8a8880;
+    --radius-md: 8px;
+    --radius-lg: 14px;
+    --shadow: 0 1px 4px rgba(0,0,0,0.08);
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .app { max-width: 800px; margin: 0 auto; padding: 1.5rem 1rem 4rem; }
+
+  .app-header { margin-bottom: 2rem; }
+  .app-header h1 { font-size: 26px; font-weight: 700; color: var(--blue-800); letter-spacing: -0.02em; margin-bottom: 4px; }
+  .app-header p { font-size: 14px; color: var(--text-muted); }
+
+  .nav { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.5rem; padding: 12px; background: var(--surface); border-radius: var(--radius-lg); border: 1px solid var(--border); box-shadow: var(--shadow); }
+  .nav-btn { background: transparent; border: 1px solid transparent; border-radius: var(--radius-md); padding: 7px 14px; font-size: 13px; font-weight: 500; cursor: pointer; color: var(--text-muted); transition: all 0.15s; }
+  .nav-btn:hover { background: var(--gray-50); color: var(--text); }
+  .nav-btn.active { background: var(--blue-50); border-color: var(--blue-100); color: var(--blue-800); }
+
+  .section { display: none; }
+  .section.active { display: block; animation: fadeIn 0.2s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+  .sec-title { font-size: 21px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .sec-sub { font-size: 14px; color: var(--text-muted); margin-bottom: 1.5rem; }
+
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.1rem 1.25rem; margin-bottom: 12px; box-shadow: var(--shadow); }
+  .card-title { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 10px; }
+
+  /* OSD / RID grids */
+  .model-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1.25rem; }
+  .model-cell { border-radius: var(--radius-md); padding: 14px 12px; }
+  .model-cell .letter { font-size: 32px; font-weight: 700; line-height: 1; margin-bottom: 8px; }
+  .model-cell .label { font-size: 13px; font-weight: 600; margin-bottom: 5px; }
+  .model-cell .desc { font-size: 12px; line-height: 1.55; opacity: 0.88; }
+
+  .cell-o { background: var(--blue-50); color: var(--blue-800); }
+  .cell-s { background: var(--teal-50); color: var(--teal-800); }
+  .cell-d { background: var(--amber-50); color: var(--amber-800); }
+  .cell-r { background: var(--coral-50); color: var(--coral-800); }
+  .cell-i { background: var(--teal-50); color: var(--teal-800); }
+  .cell-disp { background: var(--purple-50); color: var(--purple-800); }
+
+  .tip-box { background: var(--amber-50); border-left: 3px solid #EF9F27; border-radius: 0 var(--radius-md) var(--radius-md) 0; padding: 12px 16px; font-size: 13.5px; color: var(--amber-800); margin-bottom: 1.25rem; line-height: 1.6; }
+  .tip-box strong { color: var(--amber-600); font-weight: 600; }
+
+  /* Chain */
+  .chain { display: flex; align-items: center; flex-wrap: wrap; gap: 0; margin-bottom: 1.25rem; }
+  .chain-step { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 9px 12px; font-size: 13px; font-weight: 500; text-align: center; flex: 1; min-width: 80px; }
+  .chain-step.first { background: var(--blue-50); color: var(--blue-800); border-color: var(--blue-100); }
+  .chain-step.last { background: var(--coral-50); color: var(--coral-800); border-color: #F5C4B3; }
+  .chain-arrow { color: var(--text-hint); font-size: 18px; padding: 0 3px; flex-shrink: 0; }
+
+  /* Phase rows */
+  .phase-list { }
+  .phase-row { display: grid; grid-template-columns: 38px 1fr; gap: 12px; align-items: start; padding: 11px 0; border-bottom: 1px solid var(--border); }
+  .phase-row:last-child { border-bottom: none; }
+  .phase-num { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; flex-shrink: 0; margin-top: 2px; }
+  .phase-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+  .phase-sub { font-size: 12.5px; color: var(--text-muted); line-height: 1.5; margin-bottom: 5px; }
+  .risk-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+  .risk-tag { font-size: 11px; padding: 2px 8px; border-radius: 99px; font-weight: 500; }
+  .risk-red { background: var(--red-50); color: var(--red-800); }
+  .risk-amber { background: var(--amber-50); color: var(--amber-800); }
+
+  /* Normativa */
+  .norm-table { width: 100%; border-collapse: collapse; }
+  .norm-table thead tr { background: var(--blue-50); }
+  .norm-table th { text-align: left; padding: 9px 12px; font-size: 12px; font-weight: 600; color: var(--blue-800); letter-spacing: 0.04em; text-transform: uppercase; }
+  .norm-table td { padding: 10px 12px; font-size: 13px; vertical-align: top; border-bottom: 1px solid var(--border); }
+  .norm-table tr:last-child td { border-bottom: none; }
+  .norm-sig { font-weight: 700; color: var(--blue-800); font-size: 13px; white-space: nowrap; }
+  .norm-name { font-weight: 500; color: var(--text); font-size: 13px; margin-bottom: 2px; }
+  .norm-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+
+  /* Scenarios */
+  .scenario-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 1.25rem; }
+  .scenario-card { border-radius: var(--radius-md); padding: 12px 14px; }
+  .sc-num { font-size: 22px; font-weight: 700; line-height: 1; margin-bottom: 5px; }
+  .sc-title { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+  .sc-desc { font-size: 12px; opacity: 0.85; }
+
+  /* Flashcards */
+  .fc-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+  .fc-counter { font-size: 14px; color: var(--text-muted); font-weight: 500; }
+  .fc-area { perspective: 1200px; margin-bottom: 1.5rem; }
+  .flashcard { width: 100%; height: 200px; cursor: pointer; transform-style: preserve-3d; transition: transform 0.55s cubic-bezier(.4,0,.2,1); position: relative; border-radius: var(--radius-lg); }
+  .flashcard.flipped { transform: rotateY(180deg); }
+  .fc-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: var(--radius-lg); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1.75rem 2rem; text-align: center; }
+  .fc-front { background: var(--surface); border: 1px solid var(--border); box-shadow: var(--shadow); }
+  .fc-back { background: var(--blue-50); border: 1px solid var(--blue-100); transform: rotateY(180deg); }
+  .fc-label { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px; }
+  .fc-front .fc-label { color: var(--text-hint); }
+  .fc-back .fc-label { color: var(--blue-400); }
+  .fc-q { font-size: 16px; font-weight: 600; color: var(--text); line-height: 1.4; }
+  .fc-a { font-size: 14px; color: var(--blue-800); line-height: 1.6; }
+  .fc-hint { font-size: 12px; color: var(--text-hint); margin-top: 12px; }
+
+  /* Quiz */
+  .quiz-q { font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 1.1rem; line-height: 1.5; }
+  .quiz-opt { display: block; width: 100%; text-align: left; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 11px 16px; font-size: 14px; cursor: pointer; margin-bottom: 8px; color: var(--text); transition: all 0.15s; font-family: inherit; }
+  .quiz-opt:hover:not(:disabled) { background: var(--gray-50); border-color: var(--gray-200); }
+  .quiz-opt.correct { background: var(--green-50); border-color: #97C459; color: var(--green-800); font-weight: 500; }
+  .quiz-opt.wrong { background: var(--red-50); border-color: #F09595; color: var(--red-800); }
+  .quiz-opt:disabled { cursor: default; }
+  .quiz-feedback { padding: 12px 16px; border-radius: var(--radius-md); font-size: 13.5px; margin: 4px 0 1rem; line-height: 1.6; }
+  .fb-ok { background: var(--green-50); color: var(--green-800); border-left: 3px solid #97C459; }
+  .fb-ko { background: var(--red-50); color: var(--red-800); border-left: 3px solid #F09595; }
+
+  .btn { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 8px 18px; font-size: 14px; font-weight: 500; cursor: pointer; color: var(--text); font-family: inherit; transition: all 0.15s; }
+  .btn:hover { background: var(--gray-50); }
+  .btn-primary { background: var(--blue-50); border-color: var(--blue-100); color: var(--blue-800); }
+  .btn-primary:hover { background: var(--blue-100); }
+
+  .score-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 2rem; text-align: center; box-shadow: var(--shadow); }
+  .score-num { font-size: 40px; font-weight: 700; color: var(--blue-800); margin-bottom: 8px; }
+  .score-msg { font-size: 15px; color: var(--text-muted); margin-bottom: 1.5rem; }
+
+  @media (max-width: 600px) {
+    .model-grid { grid-template-columns: 1fr; }
+    .scenario-grid { grid-template-columns: 1fr; }
+    .chain { gap: 4px; }
+    .chain-step { min-width: 60px; font-size: 12px; padding: 7px 8px; }
+    .norm-table { font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="app-header">
+    <h1>Guida di Studio</h1>
+    <p>Sicurezza Legale, Forense e Protezione dei Dati</p>
+  </div>
+
+  <div class="nav">
+    <button class="nav-btn active" onclick="show('osd', this)">OSD</button>
+    <button class="nav-btn" onclick="show('rid', this)">RID</button>
+    <button class="nav-btn" onclick="show('catena', this)">Catena dati</button>
+    <button class="nav-btn" onclick="show('normativa', this)">Normativa</button>
+    <button class="nav-btn" onclick="show('forense', this)">Forense</button>
+    <button class="nav-btn" onclick="show('flashcard', this)">Flashcard</button>
+    <button class="nav-btn" onclick="show('quiz', this)">Quiz</button>
+  </div>
+
+  <!-- OSD -->
+  <div id="sec-osd" class="section active">
+    <div class="sec-title">Modello OSD</div>
+    <div class="sec-sub">Il cuore dell'analisi della sicurezza nel contesto legale e forense</div>
+
+    <div class="model-grid">
+      <div class="model-cell cell-o">
+        <div class="letter">O</div>
+        <div class="label">Oggetto</div>
+        <div class="desc">Ciò che devo proteggere: dati, sistemi, software, dispositivi, infrastrutture, processi</div>
+      </div>
+      <div class="model-cell cell-s">
+        <div class="letter">S</div>
+        <div class="label">Soggetto</div>
+        <div class="desc">Chi interagisce: utenti, dipendenti, fornitori, attaccanti. Include formazione e responsabilità</div>
+      </div>
+      <div class="model-cell cell-d">
+        <div class="letter">D</div>
+        <div class="label">Documentale</div>
+        <div class="desc">Come dimostro: policy, log, DPIA, audit, procedure, manuali, evidenze</div>
+      </div>
+    </div>
+
+    <div class="tip-box"><strong>Attenzione:</strong> OSD non è uguale a RID. OSD risponde a "come analizzo la sicurezza?", RID risponde a "cosa devo proteggere nel dato?"</div>
+
+    <div class="card">
+      <div class="card-title">OSD applicato in pratica</div>
+      <div class="phase-list">
+        <div class="phase-row">
+          <div class="phase-num" style="background:var(--blue-50);color:var(--blue-800);">O</div>
+          <div>
+            <div class="phase-title">A una telecamera</div>
+            <div class="phase-sub">Immagini, audio, metadati acquisiti dal sensore</div>
+          </div>
+        </div>
+        <div class="phase-row">
+          <div class="phase-num" style="background:var(--teal-50);color:var(--teal-800);">S</div>
+          <div>
+            <div class="phase-title">A un'azienda</div>
+            <div class="phase-sub">Operatori, clienti, fornitori, tecnici che accedono ai dati</div>
+          </div>
+        </div>
+        <div class="phase-row">
+          <div class="phase-num" style="background:var(--amber-50);color:var(--amber-800);">D</div>
+          <div>
+            <div class="phase-title">Al flusso dati</div>
+            <div class="phase-sub">Registro delle attività, policy, valutazione d'impatto, evidenze forensi</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Il punto debole</div>
+      <div style="font-size:14px;color:var(--text-muted);line-height:1.65;">
+        Il punto debole della catena è sempre <strong style="color:var(--text)">l'anello più fragile dell'OSD</strong>. Il 90% dei problemi non nasce da malafede, ma da cattiva gestione, mancanza di formazione o uso promiscuo degli strumenti.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">In una frase</div>
+      <div style="font-size:15px;font-weight:600;color:var(--blue-800);text-align:center;padding:8px 0;">
+        OSD = proteggere l'oggetto · controllare il soggetto · dimostrare tutto con documentazione
+      </div>
+    </div>
+  </div>
+
+  <!-- RID -->
+  <div id="sec-rid" class="section">
+    <div class="sec-title">Modello RID</div>
+    <div class="sec-sub">Le tre proprietà fondamentali del dato (CIA in inglese: Confidentiality, Integrity, Availability)</div>
+
+    <div class="model-grid">
+      <div class="model-cell cell-r">
+        <div class="letter">R</div>
+        <div class="label">Riservatezza</div>
+        <div class="desc">Chi può vedere i dati? Solo i soggetti autorizzati possono accedere</div>
+      </div>
+      <div class="model-cell cell-i">
+        <div class="letter">I</div>
+        <div class="label">Integrità</div>
+        <div class="desc">Chi può modificare i dati? Protezione da alterazioni non autorizzate</div>
+      </div>
+      <div class="model-cell cell-disp">
+        <div class="letter">D</div>
+        <div class="label">Disponibilità</div>
+        <div class="desc">Quando posso accedere? I dati devono essere disponibili quando servono</div>
+      </div>
+    </div>
+
+    <div class="tip-box"><strong>Data Breach:</strong> Una violazione di qualsiasi proprietà RID costituisce un data breach. Va notificato al Garante entro <strong>72 ore</strong> dalla scoperta.</div>
+
+    <div class="card">
+      <div class="card-title">Esempi di violazione RID</div>
+      <div class="phase-list">
+        <div class="phase-row">
+          <div class="phase-num" style="background:var(--coral-50);color:var(--coral-800);">R</div>
+          <div>
+            <div class="phase-title">Violazione Riservatezza</div>
+            <div class="phase-sub">Accesso illegittimo da parte di chi non è autorizzato, intercettazione MITM (Man In The Middle), email inviata al destinatario sbagliato</div>
+          </div>
+        </div>
+        <div class="phase-row">
+          <div class="phase-num" style="background:var(--teal-50);color:var(--teal-800);">I</div>
+          <div>
+            <div class="phase-title">Violazione Integrità</div>
+            <div class="phase-sub">Modifica non autorizzata di un file, alterazione di un'immagine o di un log. Il codice hash garantisce che nulla sia stato cambiato</div>
+          </div>
+        </div>
+        <div class="phase-row">
+          <div class="phase-num" style="background:var(--purple-50);color:var(--purple-800);">D</div>
+          <div>
+            <div class="phase-title">Violazione Disponibilità</div>
+            <div class="phase-sub">Attacco ransomware che blocca i dati, cancellazione accidentale, guasto hardware senza backup, attacco DDoS</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CATENA -->
+  <div id="sec-catena" class="section">
+    <div class="sec-title">La catena del trattamento dati</div>
+    <div class="sec-sub">Dal punto zero (acquisizione) fino alla dismissione — ogni anello è un punto di rischio</div>
+
+    <div class="chain">
+      <div class="chain-step first">Acquisizione</div>
+      <div class="chain-arrow">→</div>
+      <div class="chain-step">Elaborazione</div>
+      <div class="chain-arrow">→</div>
+      <div class="chain-step">Memorizzazione</div>
+      <div class="chain-arrow">→</div>
+      <div class="chain-step">Conservazione</div>
+      <div class="chain-arrow">→</div>
+      <div class="chain-step last">Dismissione</div>
+    </div>
+
+    <div class="card">
+      <div class="phase-list">
+        <div class="phase-row">
+          <div class="phase-num" style="background:var(--blue-50);color:var(--blue-800);">1</div>
+          <div>
+            <div class="phase-title">Acquisizione — il Punto Zero</div>
+            <div class="phase-sub">Verbale, email, moduli digitali, telecamere, sensori, telefono, WhatsApp</div>
+            <div class="risk-tags" style="margin-top:5px">
+              <span class="risk-tag risk-red">Intercettazione</span>
+              <span class="risk-tag risk-red">Distorsioni</span>
+              <span class="risk-tag risk-red">Dati falsi</span>
+              <span class="risk-tag risk-red">Spoofing</span>
+            </div>
+          </div>
+        </div>
+        <div class="phase-row">
+          <div class="phase-num" style="background:var(--green-50);color:var(--green-800);">2</div>
+          <div>
+            <div class="phase-title">Elaborazione</div>
+            <div class="phase-sub">Interpretazione, modifica, uso dei dati raccolti</div>
+            <div class="risk-tags" style="margin-top:5px">
+              <span class="risk-tag risk-amber">Accessi illegittimi</span>
+              <span class="risk-tag risk-amber">Alterazioni</span>
+              <span class="risk-tag risk-amber">Errori umani</span>
+            </div>
+          </div>
+        </div>
+        <div class="phase-row">
+          <div class="phase-num" style="background:var(--purple-50);color:var(--purple-800);">3</div>
+          <div>
+            <div class="phase-title">Memorizzazione</div>
+            <div class="phase-sub">Archivi, cloud, backup, SDI (Sistema di Interscambio), database</div>
+            <div class="risk-tags" style="margin-top:5px">
+              <span class="risk-tag risk-amber">Perdita</span>
+              <span class="risk-tag risk-amber">Furto</span>
+              <span class="risk-tag risk-amber">Cancellazione</span>
+            </div>
+          </div>
+        </div>
+        <div class="phase-row">
+          <div class="phase-num" style="background:var(--teal-50);color:var(--teal-800);">4</div>
+          <div>
+            <div class="phase-title">Conservazione</div>
+            <div class="phase-sub">10 anni per obblighi fiscali (Agenzia delle Entrate)</div>
+            <div class="risk-tags" style="margin-top:5px">
+              <span class="risk-tag risk-red">Accesso non autorizzato</span>
+            </div>
+          </div>
+        </div>
+        <div class="phase-row">
+          <div class="phase-num" style="background:var(--coral-50);color:var(--coral-800);">5</div>
+          <div>
+            <div class="phase-title">Dismissione</div>
+            <div class="phase-sub">Cancellazione sicura, anonimizzazione dei dati</div>
+            <div class="risk-tags" style="margin-top:5px">
+              <span class="risk-tag risk-red">Copie residue</span>
+              <span class="risk-tag risk-red">Backup non puliti</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tip-box"><strong>Regola d'oro:</strong> Il punto più critico è l'acquisizione. Se il dato nasce male, tutto il trattamento che segue eredita l'errore. Ogni azione sulla catena va documentata (parte D di OSD).</div>
+
+    <div class="card">
+      <div class="card-title">Schema riassuntivo finale</div>
+      <div style="text-align:center;font-size:14px;color:var(--blue-800);font-weight:600;line-height:2;padding:8px 0;">
+        Acquisizione → Trattamento → Dismissione<br>
+        <span style="font-size:13px;font-weight:400;color:var(--text-muted)">ogni anello deve rispettare:</span><br>
+        OSD + RID + Adeguatezza + Documentazione + DPIA
+      </div>
+    </div>
+  </div>
+
+  <!-- NORMATIVA -->
+  <div id="sec-normativa" class="section">
+    <div class="sec-title">Quadro normativo</div>
+    <div class="sec-sub">Tutte le sigle scritte per esteso, con descrizione</div>
+
+    <div class="card">
+      <div class="card-title">Regolamenti, comitati e autorità</div>
+      <table class="norm-table">
+        <thead><tr><th>Sigla</th><th>Nome completo e descrizione</th></tr></thead>
+        <tbody>
+          <tr><td><span class="norm-sig">GDPR</span></td><td><div class="norm-name">General Data Protection Regulation</div><div class="norm-desc">Regolamento UE sulla protezione dei dati personali — definisce obblighi, diritti e sanzioni per chi tratta dati</div></td></tr>
+          <tr><td><span class="norm-sig">EDPB</span></td><td><div class="norm-name">European Data Protection Board — Comitato Europeo per la Protezione dei Dati</div><div class="norm-desc">Ha sostituito il WP29 il 25 maggio 2018. Interpreta e applica il GDPR in modo uniforme in tutta l'UE</div></td></tr>
+          <tr><td><span class="norm-sig">WP29</span></td><td><div class="norm-name">Working Party Article 29 — Gruppo di Lavoro Articolo 29</div><div class="norm-desc">Organo consultivo tecnico UE predecessore dell'EDPB. Le sue linee guida rimangono un riferimento</div></td></tr>
+          <tr><td><span class="norm-sig">CNIL</span></td><td><div class="norm-name">Commission Nationale de l'Informatique et des Libertés</div><div class="norm-desc">Autorità francese di protezione dei dati — produce linee guida tecniche di riferimento europeo</div></td></tr>
+          <tr><td><span class="norm-sig">ACN</span></td><td><div class="norm-name">Agenzia per la Cybersicurezza Nazionale</div><div class="norm-desc">Ente italiano che pubblica avvisi, linee guida e protocolli sulla sicurezza informatica nazionale</div></td></tr>
+          <tr><td><span class="norm-sig">ENISA</span></td><td><div class="norm-name">European Union Agency for Cybersecurity — Agenzia UE per la Cybersicurezza</div><div class="norm-desc">Produce buone pratiche e raccomandazioni tecniche per la cybersicurezza europea</div></td></tr>
+          <tr><td><span class="norm-sig">DPO</span></td><td><div class="norm-name">Data Protection Officer — Responsabile della Protezione dei Dati</div><div class="norm-desc">Figura obbligatoria in alcune organizzazioni che supervisiona la conformità al GDPR</div></td></tr>
+          <tr><td><span class="norm-sig">PA</span></td><td><div class="norm-name">Pubblica Amministrazione</div><div class="norm-desc">Enti pubblici: comuni, regioni, scuole, ospedali, ministeri — soggetti a obblighi specifici GDPR</div></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Strumenti tecnici e standard di vulnerabilità</div>
+      <table class="norm-table">
+        <thead><tr><th>Sigla</th><th>Nome completo e descrizione</th></tr></thead>
+        <tbody>
+          <tr><td><span class="norm-sig">CVE</span></td><td><div class="norm-name">Common Vulnerabilities and Exposures — Vulnerabilità ed Esposizioni Comuni</div><div class="norm-desc">Codice univoco assegnato a ogni vulnerabilità informatica nota (es. CVE-2024-12345)</div></td></tr>
+          <tr><td><span class="norm-sig">CVSS</span></td><td><div class="norm-name">Common Vulnerability Scoring System — Sistema di Punteggio delle Vulnerabilità</div><div class="norm-desc">Punteggio da 0 a 10 che misura la gravità di una vulnerabilità. 0 = nessun rischio, 10 = critico</div></td></tr>
+          <tr><td><span class="norm-sig">NVD</span></td><td><div class="norm-name">National Vulnerability Database — Banca Dati Nazionale delle Vulnerabilità</div><div class="norm-desc">Database ufficiale USA delle vulnerabilità informatiche, gestito dal NIST</div></td></tr>
+          <tr><td><span class="norm-sig">NIST</span></td><td><div class="norm-name">National Institute of Standards and Technology</div><div class="norm-desc">Ente USA che definisce standard tecnici e framework di cybersicurezza (es. NIST Cybersecurity Framework)</div></td></tr>
+          <tr><td><span class="norm-sig">SCAP</span></td><td><div class="norm-name">Security Content Automation Protocol</div><div class="norm-desc">Standard per automatizzare gestione e controllo delle vulnerabilità informatiche</div></td></tr>
+          <tr><td><span class="norm-sig">DPIA</span></td><td><div class="norm-name">Data Protection Impact Assessment — Valutazione d'Impatto sulla Protezione dei Dati</div><div class="norm-desc">Analisi obbligatoria per trattamenti ad alto rischio. Risponde a: "quanto male può fare questo trattamento alle persone?"</div></td></tr>
+          <tr><td><span class="norm-sig">PIA</span></td><td><div class="norm-name">Privacy Impact Assessment — Analisi del Rischio Privacy</div><div class="norm-desc">Valutazione del rischio di un trattamento dati sui diritti e libertà degli individui</div></td></tr>
+          <tr><td><span class="norm-sig">AIDA64</span></td><td><div class="norm-name">Advanced System Information, Diagnostic and Analysis</div><div class="norm-desc">Strumento per la diagnosi e l'inventario hardware/software di un PC — utile per mappatura tecnica, non è uno strumento di difesa</div></td></tr>
+          <tr><td><span class="norm-sig">SDI</span></td><td><div class="norm-name">Sistema di Interscambio</div><div class="norm-desc">Sistema italiano per la gestione delle fatture elettroniche</div></td></tr>
+          <tr><td><span class="norm-sig">BIOS</span></td><td><div class="norm-name">Basic Input/Output System — Sistema Base di Input/Output</div><div class="norm-desc">Firmware che si avvia prima del sistema operativo. Se compromesso bypassa tutte le misure di sicurezza</div></td></tr>
+          <tr><td><span class="norm-sig">MITM</span></td><td><div class="norm-name">Man In The Middle — Attacco dell'Uomo nel Mezzo</div><div class="norm-desc">Tipo di attacco in cui un terzo intercetta la comunicazione tra due parti senza che loro lo sappiano</div></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- FORENSE -->
+  <div id="sec-forense" class="section">
+    <div class="sec-title">Aspetti forensi</div>
+    <div class="sec-sub">I 6 scenari investigativi e i principi fondamentali dell'analisi forense</div>
+
+    <div class="scenario-grid">
+      <div class="scenario-card" style="background:var(--blue-50);color:var(--blue-800);">
+        <div class="sc-num">1</div>
+        <div class="sc-title">Apparato spento</div>
+        <div class="sc-desc">senza connessione di rete</div>
+      </div>
+      <div class="scenario-card" style="background:var(--green-50);color:var(--green-800);">
+        <div class="sc-num">2</div>
+        <div class="sc-title">Apparato acceso</div>
+        <div class="sc-desc">senza connessione di rete</div>
+      </div>
+      <div class="scenario-card" style="background:var(--amber-50);color:var(--amber-800);">
+        <div class="sc-num">3</div>
+        <div class="sc-title">Terminale spento</div>
+        <div class="sc-desc">connesso alla rete</div>
+      </div>
+      <div class="scenario-card" style="background:var(--coral-50);color:var(--coral-800);">
+        <div class="sc-num">4</div>
+        <div class="sc-title">Terminale acceso</div>
+        <div class="sc-desc">connesso alla rete</div>
+      </div>
+      <div class="scenario-card" style="background:var(--purple-50);color:var(--purple-800);">
+        <div class="sc-num">5</div>
+        <div class="sc-title">Servizio attivo</div>
+        <div class="sc-desc">es. account social, posta elettronica</div>
+      </div>
+      <div class="scenario-card" style="background:var(--teal-50);color:var(--teal-800);">
+        <div class="sc-num">6</div>
+        <div class="sc-title">Servizio disattivo</div>
+        <div class="sc-desc">account offline o disabilitato</div>
+      </div>
+    </div>
+
+    <div class="tip-box"><strong>Regola forense fondamentale:</strong> Ogni scenario cambia completamente l'indagine. Dopo un evento: non alterare nulla → isolare → analizzare → ricostruire.</div>
+
+    <div class="card">
+      <div class="card-title">Principi chiave dell'analisi forense</div>
+      <div class="phase-list">
+        <div class="phase-row">
+          <div class="phase-num" style="background:var(--blue-50);color:var(--blue-800);font-size:11px;font-weight:700;">HASH</div>
+          <div>
+            <div class="phase-title">Integrità della catena di custodia</div>
+            <div class="phase-sub">Il codice hash garantisce che un file o dato non sia stato modificato. Fondamentale per immagini, log e prove forensi digitali</div>
+          </div>
+        </div>
+        <div class="phase-row">
+          <div class="phase-num" style="background:var(--teal-50);color:var(--teal-800);">3°</div>
+          <div>
+            <div class="phase-title">Supervisore neutrale (terzo indipendente)</div>
+            <div class="phase-sub">Serve un soggetto non coinvolto nel processo per garantire l'indipendenza della verifica — principio della supervisione indipendente</div>
+          </div>
+        </div>
+        <div class="phase-row">
+          <div class="phase-num" style="background:var(--amber-50);color:var(--amber-800);font-size:11px;font-weight:700;">INFO</div>
+          <div>
+            <div class="phase-title">Classificazione dell'informazione</div>
+            <div class="phase-sub">Ogni dato va classificato come: <strong>sicuro</strong> / <strong>falso</strong> / <strong>dubbioso</strong>. È la base della valutazione forense per determinare il peso da attribuire a ogni elemento</div>
+          </div>
+        </div>
+        <div class="phase-row">
+          <div class="phase-num" style="background:var(--coral-50);color:var(--coral-800);font-size:10px;font-weight:700;">FP/FN</div>
+          <div>
+            <div class="phase-title">Falsi positivi e falsi negativi</div>
+            <div class="phase-sub"><strong>Falso positivo:</strong> errore rilevato che non causa danno reale. <strong>Falso negativo:</strong> danno reale non rilevato. La sicurezza deve prevedere entrambi</div>
+          </div>
+        </div>
+        <div class="phase-row">
+          <div class="phase-num" style="background:var(--purple-50);color:var(--purple-800);font-size:10px;font-weight:700;">PRE</div>
+          <div>
+            <div class="phase-title">Documentazione pre-evento</div>
+            <div class="phase-sub">Policy, procedure, formazione, privacy by design, controlli preventivi. Se non è documentato prima, non esiste dopo</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FLASHCARD -->
+  <div id="sec-flashcard" class="section">
+    <div class="sec-title">Flashcard</div>
+    <div class="sec-sub">Clicca sulla carta per vedere la risposta, poi passa alla successiva</div>
+
+    <div class="fc-nav">
+      <button class="btn" onclick="prevCard()">← Precedente</button>
+      <span class="fc-counter" id="fc-count">1 / 12</span>
+      <button class="btn" onclick="nextCard()">Successiva →</button>
+    </div>
+
+    <div class="fc-area">
+      <div class="flashcard" id="fc" onclick="flipCard()">
+        <div class="fc-face fc-front">
+          <div class="fc-label">Domanda</div>
+          <div class="fc-q" id="fc-q"></div>
+          <div class="fc-hint">Clicca per vedere la risposta</div>
+        </div>
+        <div class="fc-face fc-back">
+          <div class="fc-label">Risposta</div>
+          <div class="fc-a" id="fc-a"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div id="sec-quiz" class="section">
+    <div class="sec-title">Quiz di verifica</div>
+    <div class="sec-sub" id="quiz-progress">Domanda 1 di 8</div>
+
+    <div id="quiz-area">
+      <div class="quiz-q" id="q-text"></div>
+      <div id="q-opts"></div>
+      <div id="q-feedback" style="display:none"></div>
+      <button class="btn btn-primary" id="q-next" style="display:none;margin-top:8px;" onclick="nextQuiz()">Prossima domanda →</button>
+    </div>
+
+    <div id="quiz-result" style="display:none">
+      <div class="score-box">
+        <div class="score-num" id="score-num"></div>
+        <div class="score-msg" id="score-msg"></div>
+        <button class="btn btn-primary" onclick="resetQuiz()">Riprova</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// Navigation
+function show(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('sec-' + id).classList.add('active');
+  if(btn) btn.classList.add('active');
+}
+
+// Flashcards
+const flashcards = [
+  {q:"Cosa significa la O di OSD?", a:"Oggetto — ciò che devo proteggere: dati, sistemi, software, dispositivi, processi, infrastrutture"},
+  {q:"Cosa significa la S di OSD?", a:"Soggetto — chi interagisce con i dati: utenti, dipendenti, fornitori, attaccanti. Include formazione e responsabilità"},
+  {q:"Cosa significa la D di OSD?", a:"Documentale — come dimostro la conformità: policy, log, DPIA, audit, procedure, evidenze"},
+  {q:"Cosa significa RID?", a:"Riservatezza, Integrità, Disponibilità — le tre proprietà fondamentali della sicurezza del dato (CIA in inglese)"},
+  {q:"Entro quando va notificato un data breach al Garante?", a:"Entro 72 ore dalla scoperta della violazione"},
+  {q:"Cosa ha sostituito il WP29 (Gruppo di Lavoro Articolo 29)?", a:"L'EDPB (European Data Protection Board — Comitato Europeo per la Protezione dei Dati), il 25 maggio 2018"},
+  {q:"Qual è il punto più critico della catena del trattamento dati?", a:"L'acquisizione: se il dato nasce male, tutto il trattamento che segue eredita l'errore"},
+  {q:"Cosa misura il CVSS (Common Vulnerability Scoring System)?", a:"La gravità di una vulnerabilità informatica, con un punteggio da 0 (nessun rischio) a 10 (critico)"},
+  {q:"Cosa garantisce il codice hash in ambito forense?", a:"Che un dato (file, immagine, log) non sia stato modificato — fondamentale per la catena di custodia"},
+  {q:"Qual è la differenza tra OSD e RID?", a:"OSD = come gestire la sicurezza (oggetto, soggetto, documentazione). RID = cosa proteggere nel dato (riservatezza, integrità, disponibilità)"},
+  {q:"Cosa è la DPIA (Data Protection Impact Assessment)?", a:"La Valutazione d'Impatto sulla Protezione dei Dati — obbligatoria per trattamenti ad alto rischio. Risponde a: quanto male può fare questo trattamento alle persone?"},
+  {q:"Qual è la regola per ridurre la superficie d'attacco?", a:"Se un software non è essenziale, si rimuove. Ogni rimozione va documentata: cosa, quando, perché, da quale postazione, con quale metodo"},
+];
+let fcIdx = 0;
+function renderCard() {
+  document.getElementById('fc').classList.remove('flipped');
+  document.getElementById('fc-q').textContent = flashcards[fcIdx].q;
+  document.getElementById('fc-a').textContent = flashcards[fcIdx].a;
+  document.getElementById('fc-count').textContent = (fcIdx + 1) + ' / ' + flashcards.length;
+}
+function flipCard() { document.getElementById('fc').classList.toggle('flipped'); }
+function nextCard() { fcIdx = (fcIdx + 1) % flashcards.length; renderCard(); }
+function prevCard() { fcIdx = (fcIdx - 1 + flashcards.length) % flashcards.length; renderCard(); }
+renderCard();
+
+// Quiz
+const quizData = [
+  {q:"Cosa significa l'acronimo OSD nel contesto della sicurezza legale e forense?", opts:["Oggetto, Soggetto, Documentale","Operativo, Sistemico, Digitale","Osservazione, Supervisione, Documentazione","Output, Sistema, Dato"], ans:0, exp:"OSD = Oggetto (cosa proteggi), Soggetto (chi interagisce), Documentale (come dimostri). Non va confuso con RID."},
+  {q:"Entro quanto tempo va notificato un data breach al Garante della Privacy?", opts:["24 ore","48 ore","72 ore","7 giorni"], ans:2, exp:"Il GDPR impone la notifica al Garante entro 72 ore dalla scoperta della violazione."},
+  {q:"Quale sigla identifica il codice univoco assegnato a ogni vulnerabilità informatica nota?", opts:["CVSS","NVD","CVE","SCAP"], ans:2, exp:"CVE = Common Vulnerabilities and Exposures. Il CVSS invece è il punteggio (0-10) che misura la gravità."},
+  {q:"L'EDPB ha sostituito il WP29. Quando è avvenuta la sostituzione?", opts:["2016","2018","2020","2022"], ans:1, exp:"L'EDPB ha sostituito il WP29 il 25 maggio 2018, data di applicazione del GDPR."},
+  {q:"Qual è il punto più critico della catena del trattamento dati?", opts:["La memorizzazione","La dismissione","L'acquisizione","L'elaborazione"], ans:2, exp:"L'acquisizione è il punto zero: se il dato nasce male, tutto il trattamento che segue eredita l'errore."},
+  {q:"In ambito forense, in quante categorie si classifica l'informazione?", opts:["2 (vera / falsa)","3 (sicura / falsa / dubbiosa)","4 (certa / probabile / dubbia / falsa)","5 categorie"], ans:1, exp:"Ogni dato va classificato come sicuro, falso o dubbioso. È la base della valutazione forense."},
+  {q:"Cosa misura il CVSS (Common Vulnerability Scoring System)?", opts:["Il numero di sistemi vulnerabili","Il tempo di correzione di una falla","La gravità di una vulnerabilità da 0 a 10","Il costo di un attacco"], ans:2, exp:"CVSS assegna un punteggio da 0 (nessun rischio) a 10 (critico) per quantificare la gravità di una vulnerabilità."},
+  {q:"Quale proprietà RID viene violata quando un ransomware blocca l'accesso ai dati?", opts:["Riservatezza","Integrità","Disponibilità","Nessuna delle tre"], ans:2, exp:"Il ransomware blocca l'accesso ai dati → viola la Disponibilità (D di RID). Se cifra modificando i dati, viola anche l'Integrità."},
+];
+let qIdx = 0, score = 0, answered = false;
+function renderQuiz() {
+  if(qIdx >= quizData.length) { showResult(); return; }
+  answered = false;
+  const q = quizData[qIdx];
+  document.getElementById('quiz-progress').textContent = 'Domanda ' + (qIdx + 1) + ' di ' + quizData.length;
+  document.getElementById('q-text').textContent = q.q;
+  const area = document.getElementById('q-opts');
+  area.innerHTML = '';
+  q.opts.forEach((o, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-opt';
+    btn.textContent = o;
+    btn.onclick = () => checkAnswer(i, btn);
+    area.appendChild(btn);
+  });
+  document.getElementById('q-feedback').style.display = 'none';
+  document.getElementById('q-next').style.display = 'none';
+}
+function checkAnswer(idx, btn) {
+  if(answered) return;
+  answered = true;
+  const q = quizData[qIdx];
+  document.querySelectorAll('.quiz-opt').forEach(b => b.disabled = true);
+  const fb = document.getElementById('q-feedback');
+  if(idx === q.ans) {
+    score++;
+    btn.classList.add('correct');
+    fb.className = 'quiz-feedback fb-ok';
+    fb.textContent = '✓ Corretto! ' + q.exp;
+  } else {
+    btn.classList.add('wrong');
+    document.querySelectorAll('.quiz-opt')[q.ans].classList.add('correct');
+    fb.className = 'quiz-feedback fb-ko';
+    fb.textContent = '✗ La risposta giusta era: ' + q.opts[q.ans] + '. ' + q.exp;
+  }
+  fb.style.display = 'block';
+  document.getElementById('q-next').style.display = 'inline-block';
+}
+function nextQuiz() { qIdx++; renderQuiz(); }
+function showResult() {
+  document.getElementById('quiz-area').style.display = 'none';
+  document.getElementById('quiz-result').style.display = 'block';
+  const pct = Math.round(score / quizData.length * 100);
+  document.getElementById('score-num').textContent = score + ' / ' + quizData.length + ' (' + pct + '%)';
+  document.getElementById('score-msg').textContent = pct >= 80 ? 'Ottimo risultato! Sei pronto.' : pct >= 60 ? 'Buono — ripassare le parti mancanti.' : 'Ripassare i moduli e riprovare.';
+}
+function resetQuiz() {
+  qIdx = 0; score = 0; answered = false;
+  document.getElementById('quiz-area').style.display = 'block';
+  document.getElementById('quiz-result').style.display = 'none';
+  renderQuiz();
+}
+renderQuiz();
+</script>
+</body>
+</html>
